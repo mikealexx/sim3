@@ -27,9 +27,9 @@
      input logic irwrite,
      input logic [1:0] wbsel,
      input logic regwen,
-     input logic [1:0] immsel,
-     input logic asel,
-     input logic bsel,
+     input logic [2:0] immsel,
+     input logic [1:0] asel,
+     input logic [1:0] bsel,
      input logic [3:0] alusel,
      input logic mdrwrite,
      
@@ -120,16 +120,31 @@
          IMM_B: imm = {{20{ir[31]}},ir[7],ir[30:25],ir[11:8],1'b0};
          IMM_S: imm = {{21{ir[31]}},ir[30:25],ir[11:7]};
          IMM_L: imm = {{21{ir[31]}},ir[30:20]};
+		 IMM_I: imm = {ir[31:20]};
      endcase
  end
 
  // ALU input A
  logic [DPWIDTH-1:0] alu_a;
- assign alu_a = (asel == ALUA_REG) ? a : pcc;
+ always_comb
+ begin
+	case(asel)
+		ALUA_REG: alu_a = a;
+		ALUA_PCC: alu_a = pcc;
+		ALUA_ALUOUT: alu_a = aluout;
+	endcase
+ end
 
  // ALU input A
  logic [DPWIDTH-1:0] alu_b;
- assign alu_b = (bsel == ALUB_REG) ? b : imm;
+ always_comb
+ begin
+	case(bsel)
+		ALUB_IMM: alu_b = imm;
+		ALUB_REG: alu_b = b;
+		ALUB_XORI: alu_b = 32'hffffffff;
+	endcase
+ end 
 
  // For signed comparison, cast to integer. logic is by default unsigned
  integer alu_as;

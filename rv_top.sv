@@ -36,9 +36,9 @@
  logic irwrite;
  logic [1:0] wbsel;
  logic regwen;
- logic [1:0] immsel;
- logic asel;
- logic bsel;
+ logic [2:0] immsel;
+ logic [1:0] asel;
+ logic [1:0] bsel;
  logic [3:0] alusel;
  logic mdrwrite;
      

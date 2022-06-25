@@ -1,7 +1,8 @@
 .text
-main:   # Start of your code
-
-        # End of your code
+main:   
+		lw 		t6,	8(x0)
+		addi	t6, t6, 12
+		sw		t6, 16(x0)
         add		t6, x0, x0
         beq		t6, x0, finish
 
